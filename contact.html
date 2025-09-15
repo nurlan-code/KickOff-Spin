@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - KickOff Spin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a2332 0%, #2d3748 50%, #1a2332 100%); color: #ffffff; line-height: 1.6; }
+        .header { background: linear-gradient(90deg, #2d3748 0%, #4a5568 100%); padding: 1rem 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: bold; color: #ffa500; }
+        .logo::before { content: "⚽"; margin-right: 0.5rem; font-size: 2rem; }
+        .nav-menu { display: flex; list-style: none; gap: 2rem; }
+        .nav-menu a { color: #ffffff; text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        .nav-menu a:hover { color: #ffa500; }
+        .nav-menu a.active { color: #ffa500; font-weight: bold; }
+        .play-btn { background: linear-gradient(45deg, #ff6b35, #ffa500); padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; color: white; font-weight: bold; transition: transform 0.3s ease; }
+        .play-btn:hover { transform: translateY(-2px); }
+        .hamburger { display: none; flex-direction: column; cursor: pointer; }
+        .hamburger span { width: 25px; height: 3px; background: #ffa500; margin: 3px 0; transition: 0.3s; }
+
+        .main-content { margin-top: 100px; }
+        .page-hero { text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, #1a2332 0%, #2d3748 50%, #1a2332 100%); }
+        .page-hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1rem; background: linear-gradient(45deg, #ffa500, #ff6b35); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .page-hero p { font-size: 1.2rem; opacity: 0.9; max-width: 700px; margin: 0 auto; }
+
+        .contact-content { padding: 4rem 2rem; }
+        .contact-form { background: rgba(255, 255, 255, 0.1); padding: 3rem; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 165, 0, 0.3); max-width: 600px; margin: 0 auto; }
+        .contact-form h2 { text-align: center; color: #ffa500; margin-bottom: 2rem; }
+        .contact-form input, .contact-form textarea, .contact-form select { width: 100%; padding: 1rem; margin-bottom: 1rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,165,0,0.3); border-radius: 10px; color: white; font-size: 1rem; }
+        .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,0.6); }
+        .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { outline: none; border-color: #ffa500; box-shadow: 0 0 10px rgba(255,165,0,0.3); }
+        .contact-form select option { background: #2d3748; color: white; }
+        .submit-btn { width: 100%; background: linear-gradient(45deg, #ff6b35, #ffa500); padding: 1rem; border: none; border-radius: 10px; color: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,165,0,0.4); }
+
+        .support { max-width: 900px; margin: 2rem auto 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+        .card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,165,0,0.25); border-radius: 12px; padding: 1rem 1.25rem; }
+        .card h3 { color: #ffa500; margin-bottom: 0.5rem; }
+
+        .contact-faq { max-width: 900px; margin: 2rem auto 0; }
+        .contact-faq .faq-item { background: rgba(255,255,255,0.08); margin-bottom: 0.75rem; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,165,0,0.25); }
+        .contact-faq .faq-question { background: rgba(255,165,0,0.2); padding: 1rem; cursor: pointer; font-weight: 700; }
+        .contact-faq .faq-answer { padding: 0 1rem; max-height: 0; overflow: hidden; transition: all 0.3s ease; }
+        .contact-faq .faq-answer.active { padding: 1rem; max-height: 220px; }
+
+        .footer { background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); padding: 3rem 0 1rem; margin-top: 2rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .footer-text { text-align: center; color: #a0aec0; margin-bottom: 2rem; font-size: 0.9rem; line-height: 1.8; }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .footer-links a { color: #cbd5e0; text-decoration: none; transition: color 0.3s ease; }
+        .footer-links a:hover { color: #ffa500; }
+        .footer-bottom { text-align: center; border-top: 1px solid #4a5568; padding-top: 1rem; color: #718096; font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-menu { position: fixed; top: 100%; left: -100%; width: 100%; height: 100vh; background: #2d3748; flex-direction: column; align-items: center; padding-top: 2rem; transition: left 0.3s ease; }
+            .nav-menu.active { left: 0; }
+            .contact-form { padding: 2rem 1rem; }
+            .footer-links { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">KickOff Spin</div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="games.html">Games</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+            <a href="games.html" class="play-btn">Play Now</a>
+            <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="page-hero">
+            <h1>Contact Us</h1>
+            <p>Get in touch for questions, feedback, or support. We usually respond within 24–48 hours.</p>
+        </section>
+
+        <section class="contact-content">
+            <div class="contact-form">
+                <h2>Send Us a Message</h2>
+                <form id="contactForm">
+                    <input type="text" id="name" placeholder="Your Name" required>
+                    <input type="email" id="email" placeholder="Your Email" required>
+                    <select id="subject" required>
+                        <option value="" disabled selected>Select Subject</option>
+                        <option value="support">Technical Support</option>
+                        <option value="feedback">Feedback</option>
+                        <option value="partnership">Partnership</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+
+            <div class="support">
+                <div class="card">
+                    <h3>Response Times</h3>
+                    <p>We usually respond within 24–48 hours on weekdays. Expect delays during holidays and major events.</p>
+                </div>
+                <div class="card">
+                    <h3>Helpful Resources</h3>
+                    <p>Check our FAQs and community tips for quick solutions before contacting support.</p>
+                </div>
+                <div class="card">
+                    <h3>Responsible Gaming</h3>
+                    <p>Take breaks regularly and set personal limits. If needed, seek professional resources.</p>
+                </div>
+            </div>
+
+            <div class="contact-faq">
+                <div class="faq-item">
+                    <div class="faq-question">Can I change my nickname?</div>
+                    <div class="faq-answer">Yes. You can update your nickname from your profile once every 7 days.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">I did not receive a confirmation email.</div>
+                    <div class="faq-answer">Please check your spam folder. If it is not there, contact us with your registered email.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Do you support mobile devices?</div>
+                    <div class="faq-answer">Yes, the entire site is responsive and optimized for phones and tablets.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">We value your privacy and time. Expect a helpful reply from us soon.</div>
+            <div class="footer-links">
+                <a href="about.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="responsible.html">Responsible Gaming</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-bottom">© 2025 KickOff Spin. All rights reserved. | 18+</div>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        hamburger.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value.trim();
+            if (!name || !email || !subject || !message) { alert('Please fill in all fields.'); return; }
+            alert('Thank you, ' + name + '! Your message has been sent.');
+            this.reset();
+        });
+
+        document.querySelectorAll('.contact-faq .faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                document.querySelectorAll('.contact-faq .faq-answer').forEach(a => a.classList.remove('active'));
+                const answer = q.nextElementSibling; if (answer) answer.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
+
+
