@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KickOff Spin - Social Casino Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2332 0%, #2d3748 50%, #1a2332 100%);
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #2d3748 0%, #4a5568 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffa500;
+        }
+
+        .logo::before {
+            content: "⚽";
+            margin-right: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: #ffa500;
+        }
+
+        .nav-menu a.active {
+            color: #ffa500;
+            font-weight: bold;
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #ff6b35, #ffa500);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #ffa500;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        .main-content {
+            margin-top: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="2" fill="%23ffffff" opacity="0.1"/><circle cx="80" cy="80" r="1.5" fill="%23ffa500" opacity="0.15"/><circle cx="40" cy="60" r="1" fill="%23ff6b35" opacity="0.1"/></pattern></defs><rect width="100" height="20" fill="url(%23grain)"/></svg>');
+            background-size: cover;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffa500, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b35, #ffa500);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 165, 0, 0.4);
+        }
+
+        .leaderboard {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #ffa500;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #ff6b35, #ffa500);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .leaderboard-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .player-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .player-item:hover {
+            background: rgba(255, 165, 0, 0.2);
+            transform: translateX(5px);
+        }
+
+        .player-info { display: flex; align-items: center; gap: 1rem; }
+        .player-rank { font-size: 1.2rem; font-weight: bold; color: #ffa500; min-width: 2rem; }
+        .player-name { font-weight: 600; }
+        .player-points { color: #4ade80; font-weight: bold; }
+
+        .features { padding: 4rem 2rem; background: linear-gradient(135deg, #2d3748 0%, #1a2332 100%); }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .feature-card { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 15px; text-align: center; backdrop-filter: blur(10px); border: 1px solid rgba(255, 165, 0, 0.3); transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(255, 165, 0, 0.2); }
+        .feature-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .feature-card h3 { color: #ffa500; margin-bottom: 1rem; }
+
+        .faq { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .faq-item { background: rgba(255, 255, 255, 0.1); margin-bottom: 1rem; border-radius: 10px; overflow: hidden; }
+        .faq-question { background: rgba(255, 165, 0, 0.2); padding: 1rem; cursor: pointer; font-weight: bold; transition: background 0.3s ease; }
+        .faq-question:hover { background: rgba(255, 165, 0, 0.3); }
+        .faq-answer { padding: 0 1rem; max-height: 0; overflow: hidden; transition: all 0.3s ease; }
+        .faq-answer.active { padding: 1rem; max-height: 200px; }
+
+        .testimonials { padding: 4rem 2rem; background: linear-gradient(135deg, #1a2332 0%, #2d3748 100%); }
+        .testimonials-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .testimonial-card { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 165, 0, 0.3); transition: all 0.3s ease; }
+        .testimonial-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255, 165, 0, 0.2); }
+        .testimonial-text { font-style: italic; margin-bottom: 1rem; line-height: 1.8; }
+        .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+        .author-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(45deg, #ff6b35, #ffa500); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .author-info h4 { color: #ffa500; margin-bottom: 0.2rem; }
+        .author-info p { font-size: 0.9rem; opacity: 0.8; }
+
+        .how-it-works { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .step { background: rgba(255,255,255,0.08); padding: 1.75rem; border-radius: 14px; border: 1px solid rgba(255,165,0,0.25); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .step:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(255,165,0,0.18); }
+        .step .num { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(45deg, #ff6b35, #ffa500); display: flex; align-items: center; justify-content: center; font-weight: 800; margin-bottom: 0.75rem; }
+        .step h4 { color: #ffa500; margin-bottom: 0.5rem; }
+
+        .partners { padding: 3rem 2rem; background: linear-gradient(135deg, #1a2332 0%, #2d3748 100%); }
+        .partners-row { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.25rem; opacity: 0.9; }
+        .partner { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,165,0,0.2); border-radius: 12px; padding: 1rem; text-align: center; }
+
+        .newsletter { padding: 4rem 2rem; }
+        .newsletter-box { max-width: 840px; margin: 0 auto; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,165,0,0.3); border-radius: 16px; padding: 2rem; text-align: center; }
+        .newsletter-form { display: grid; grid-template-columns: 1fr auto; gap: 0.75rem; margin-top: 1rem; }
+        .newsletter-form input { padding: 0.9rem 1rem; border-radius: 10px; border: 1px solid rgba(255,165,0,0.35); background: rgba(0,0,0,0.3); color: #fff; }
+        .newsletter-form button { background: linear-gradient(45deg, #ff6b35, #ffa500); padding: 0.9rem 1.25rem; border: none; border-radius: 10px; color: #fff; font-weight: 700; cursor: pointer; }
+
+        .cta-strip { margin: 3rem auto 0; max-width: 1100px; background: linear-gradient(90deg, rgba(255,107,53,0.2), rgba(255,165,0,0.2)); border: 1px solid rgba(255,165,0,0.35); border-radius: 16px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .cta-strip a { background: linear-gradient(45deg, #ff6b35, #ffa500); padding: 0.7rem 1.25rem; border-radius: 999px; color: #fff; text-decoration: none; font-weight: 700; }
+
+        .daily-bonus { padding: 4rem 2rem; text-align: center; }
+        .bonus-container { max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.1); padding: 3rem; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 165, 0, 0.3); }
+        .bonus-wheel { width: 250px; height: 250px; background: linear-gradient(45deg, #ff6b35, #ffa500); border-radius: 50%; margin: 2rem auto; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; position: relative; cursor: pointer; transition: transform 0.5s ease; }
+        .bonus-wheel:hover { transform: scale(1.05); }
+        .bonus-wheel::after { content: "🎁"; position: absolute; font-size: 3rem; }
+
+        .footer { background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); padding: 3rem 0 1rem; margin-top: 4rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .footer-text { text-align: center; color: #a0aec0; margin-bottom: 2rem; font-size: 0.9rem; line-height: 1.8; }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .footer-links a { color: #cbd5e0; text-decoration: none; transition: color 0.3s ease; }
+        .footer-links a:hover { color: #ffa500; }
+        .footer-bottom { text-align: center; border-top: 1px solid #4a5568; padding-top: 1rem; color: #718096; font-size: 0.85rem; }
+
+        @media (max-width: 1024px) { .nav-container { padding: 0 1rem; } }
+        @media (max-width: 992px) { .features-grid, .testimonials-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-menu { position: fixed; top: 100%; left: -100%; width: 100%; height: 100vh; background: #2d3748; flex-direction: column; justify-content: flex-start; align-items: center; padding-top: 2rem; transition: left 0.3s ease; }
+            .nav-menu.active { left: 0; }
+            .features-grid, .testimonials-container { grid-template-columns: 1fr; }
+            .footer-links { flex-direction: column; gap: 1rem; }
+        }
+        @media (max-width: 576px) {
+            .nav-container { padding: 0 0.5rem; }
+            .hero { padding: 2rem 1rem; }
+            .leaderboard, .features, .faq, .testimonials, .daily-bonus { padding: 2rem 1rem; }
+            .bonus-container { padding: 2rem 1rem; }
+            .newsletter-form { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .logo { font-size: 1.2rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .section-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">KickOff Spin</div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="games.html">Games</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="#" class="play-btn">Play Now</a>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="hero">
+            <h1>Welcome to KickOff Spin Casino</h1>
+            <p>Experience the thrill of premium casino games with a sports twist. No deposits, no real money — just pure entertainment. Join thousands of players and climb the weekly leaderboards!</p>
+            <a href="games.html" class="cta-button">Start Playing Now</a>
+        </section>
+
+        <section class="how-it-works">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="num">1</div>
+                    <h4>Create Your Profile</h4>
+                    <p>Pick a nickname and personalize your avatar. No email required to start playing.</p>
+                </div>
+                <div class="step">
+                    <div class="num">2</div>
+                    <h4>Play and Earn</h4>
+                    <p>Enjoy our sports-themed slots and mini-challenges to earn points and badges.</p>
+                </div>
+                <div class="step">
+                    <div class="num">3</div>
+                    <h4>Compete Weekly</h4>
+                    <p>Join tournaments, climb leaderboards, and unlock exclusive cosmetic rewards.</p>
+                </div>
+                <div class="step">
+                    <div class="num">4</div>
+                    <h4>Share the Fun</h4>
+                    <p>Connect with friends, send gifts, and showcase your achievements to the community.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="leaderboard">
+            <h2 class="section-title">🏆 Top Players This Week 🏆</h2>
+            <div class="leaderboard-container">
+                <div class="player-item">
+                    <div class="player-info">
+                        <div class="player-rank">1.</div>
+                        <div class="player-name">⚽ GoalMaster2024</div>
+                    </div>
+                    <div class="player-points">2,847,500 pts</div>
+                </div>
+                <div class="player-item">
+                    <div class="player-info">
+                        <div class="player-rank">2.</div>
+                        <div class="player-name">🏆 ChampionSlots</div>
+                    </div>
+                    <div class="player-points">2,156,800 pts</div>
+                </div>
+                <div class="player-item">
+                    <div class="player-info">
+                        <div class="player-rank">3.</div>
+                        <div class="player-name">🎯 LuckyStriker</div>
+                    </div>
+                    <div class="player-points">1,923,400 pts</div>
+                </div>
+                <div class="player-item">
+                    <div class="player-info">
+                        <div class="player-rank">4.</div>
+                        <div class="player-name">⚡ SpeedSpinner</div>
+                    </div>
+                    <div class="player-points">1,678,200 pts</div>
+                </div>
+                <div class="player-item">
+                    <div class="player-info">
+                        <div class="player-rank">5.</div>
+                        <div class="player-name">🔥 HotStreak99</div>
+                    </div>
+                    <div class="player-points">1,445,700 pts</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <h2 class="section-title">Why Choose KickOff Spin?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎰</div>
+                    <h3>Premium Slot Games</h3>
+                    <p>High-quality slot experiences with sports themes, stunning visuals, and exciting bonus rounds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Weekly Tournaments</h3>
+                    <p>Compete worldwide and climb the leaderboards with themed events every week.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎁</div>
+                    <h3>Daily Bonuses</h3>
+                    <p>Claim daily credits, free spins, and special rewards to boost your fun.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Social Gaming</h3>
+                    <p>Connect with friends, share achievements, and enjoy our vibrant community.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Optimized</h3>
+                    <p>Play anywhere, anytime with a fully responsive, mobile-first design.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>100% Safe</h3>
+                    <p>No real money involved — enjoy risk-free casino-style entertainment.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="daily-bonus">
+            <h2 class="section-title">🎁 Daily Bonus Wheel 🎁</h2>
+            <div class="bonus-container">
+                <p>Spin the wheel every day to claim your free bonus credits and free spins!</p>
+                <div class="bonus-wheel">SPIN NOW</div>
+                <p>Come back daily for bigger rewards and special bonuses.</p>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <h2 class="section-title">What Our Players Say</h2>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">“KickOff Spin is the best social casino I've tried! The games are fun, the community is great, and I love the weekly tournaments.”</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JD</div>
+                        <div class="author-info">
+                            <h4>John Doe</h4>
+                            <p>Pro Player</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">“I enjoy casino games without risking real money. The graphics are amazing and gameplay is smooth across my devices.”</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SM</div>
+                        <div class="author-info">
+                            <h4>Sarah Miller</h4>
+                            <p>Daily Player</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">“Daily bonuses and free spins keep me coming back. Love the unique sports twist on slots!”</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MJ</div>
+                        <div class="author-info">
+                            <h4>Mike Johnson</h4>
+                            <p>Tournament Champion</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="partners">
+            <h2 class="section-title">Trusted By Players Worldwide</h2>
+            <div class="partners-row">
+                <div class="partner">Premier Fans Club</div>
+                <div class="partner">Global Slots League</div>
+                <div class="partner">eSports Circle</div>
+                <div class="partner">Mobile Gamers Hub</div>
+                <div class="partner">Casual Play Network</div>
+            </div>
+        </section>
+
+        <section class="faq">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question">Is KickOff Spin completely free to play?</div>
+                <div class="faq-answer">Yes! KickOff Spin is entirely free-to-play. We offer social casino gaming with virtual credits only.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How do I earn points and climb the leaderboard?</div>
+                <div class="faq-answer">Play games, complete daily challenges, and join tournaments to earn points and climb weekly leaderboards.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can I play on mobile devices?</div>
+                <div class="faq-answer">Absolutely. The platform is fully optimized for smartphones and tablets.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Are there any age restrictions?</div>
+                <div class="faq-answer">Yes, you must be 18+ to access and play. We promote responsible gaming.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How often are new games added?</div>
+                <div class="faq-answer">We release new content regularly and run themed events every month.</div>
+            </div>
+        </section>
+
+        <section class="newsletter">
+            <div class="newsletter-box">
+                <h2 class="section-title">Subscribe for Updates</h2>
+                <p>Get notified about new games, tournaments, and bonus events. No spam — just goodies.</p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+                <div class="cta-strip">
+                    <span>Ready to spin and win cosmetic rewards?</span>
+                    <a href="games.html">Explore Games</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                If your gaming habits are becoming problematic, please seek help and consider taking a break.
+            </div>
+            <div class="footer-links">
+                <a href="about.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="responsible.html">Responsible Gaming</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-bottom">
+                © 2025 KickOff Spin. All rights reserved. | Adults Only 18+ | Play Responsibly
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        hamburger.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('active'));
+                const answer = q.nextElementSibling;
+                if (answer) { answer.classList.add('active'); }
+            });
+        });
+
+        document.getElementById('newsletterForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = (document.getElementById('newsletterEmail') || {}).value || '';
+            if (!email.includes('@')) { alert('Please enter a valid email.'); return; }
+            alert('Thanks for subscribing!');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
+
+
