@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - KickOff Spin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a2332 0%, #2d3748 50%, #1a2332 100%); color: #ffffff; line-height: 1.6; }
+        .header { background: linear-gradient(90deg, #2d3748 0%, #4a5568 100%); padding: 1rem 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: bold; color: #ffa500; }
+        .logo::before { content: "⚽"; margin-right: 0.5rem; font-size: 2rem; }
+        .nav-menu { display: flex; list-style: none; gap: 2rem; }
+        .nav-menu a { color: #ffffff; text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        .nav-menu a:hover { color: #ffa500; }
+        .nav-menu a.active { color: #ffa500; font-weight: bold; }
+        .play-btn { background: linear-gradient(45deg, #ff6b35, #ffa500); padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; color: white; font-weight: bold; transition: transform 0.3s ease; }
+        .play-btn:hover { transform: translateY(-2px); }
+        .hamburger { display: none; flex-direction: column; cursor: pointer; }
+        .hamburger span { width: 25px; height: 3px; background: #ffa500; margin: 3px 0; transition: 0.3s; }
+        .main-content { margin-top: 100px; }
+
+        .page-hero { text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, #1a2332 0%, #2d3748 50%, #1a2332 100%); }
+        .page-hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1rem; background: linear-gradient(45deg, #ffa500, #ff6b35); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .page-hero p { font-size: 1.2rem; opacity: 0.9; max-width: 700px; margin: 0 auto; }
+
+        .features-content { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+        .features-content h2 { color: #ffa500; margin-bottom: 1rem; font-size: 2rem; }
+        .features-grid-page { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .feature-detail { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255, 165, 0, 0.3); transition: all 0.3s ease; }
+        .feature-detail:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255, 165, 0, 0.2); }
+        .feature-detail h3 { color: #ffa500; margin-bottom: 1rem; }
+        .feature-detail ul { list-style: none; padding: 0; }
+        .feature-detail li { margin-bottom: 0.5rem; padding-left: 1rem; position: relative; }
+        .feature-detail li::before { content: "⚡"; position: absolute; left: 0; color: #ffa500; }
+
+        .security { margin-top: 3rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,165,0,0.25); border-radius: 14px; padding: 2rem; }
+        .security h3 { color: #ffa500; margin-bottom: 0.75rem; }
+        .security p { opacity: 0.95; }
+
+        .roadmap { margin-top: 3rem; }
+        .roadmap h2 { color: #ffa500; margin-bottom: 1rem; }
+        .milestones { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+        .milestone { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,165,0,0.25); border-radius: 12px; padding: 1.25rem; }
+        .milestone h4 { color: #ffa500; margin-bottom: 0.5rem; }
+
+        .faq { padding: 3rem 0 0; }
+        .faq .faq-item { background: rgba(255,255,255,0.08); margin-bottom: 0.75rem; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,165,0,0.25); }
+        .faq .faq-question { background: rgba(255,165,0,0.2); padding: 1rem; cursor: pointer; font-weight: 700; }
+        .faq .faq-answer { padding: 0 1rem; max-height: 0; overflow: hidden; transition: all 0.3s ease; }
+        .faq .faq-answer.active { padding: 1rem; max-height: 220px; }
+
+        .footer { background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); padding: 3rem 0 1rem; margin-top: 2rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .footer-text { text-align: center; color: #a0aec0; margin-bottom: 2rem; font-size: 0.9rem; line-height: 1.8; }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .footer-links a { color: #cbd5e0; text-decoration: none; transition: color 0.3s ease; }
+        .footer-links a:hover { color: #ffa500; }
+        .footer-bottom { text-align: center; border-top: 1px solid #4a5568; padding-top: 1rem; color: #718096; font-size: 0.85rem; }
+
+        @media (max-width: 992px) { .features-grid-page { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-menu { position: fixed; top: 100%; left: -100%; width: 100%; height: 100vh; background: #2d3748; flex-direction: column; align-items: center; padding-top: 2rem; transition: left 0.3s ease; }
+            .nav-menu.active { left: 0; }
+            .features-grid-page { grid-template-columns: 1fr; }
+            .footer-links { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">KickOff Spin</div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="games.html">Games</a></li>
+                <li><a href="features.html" class="active">Features</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="games.html" class="play-btn">Play Now</a>
+            <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="page-hero">
+            <h1>Platform Features</h1>
+            <p>Discover the features that make KickOff Spin a premium social casino experience.</p>
+        </section>
+
+        <section class="features-content">
+            <h2>Complete Social Casino Experience</h2>
+            <p>Designed for fun, fairness, and community. Engage with tournaments, achievements, and social tools without any real-money risk.</p>
+
+            <div class="features-grid-page">
+                <div class="feature-detail">
+                    <h3>🎯 Weekly Tournaments</h3>
+                    <ul>
+                        <li>Compete against players worldwide</li>
+                        <li>Climb dynamic leaderboards</li>
+                        <li>Special prizes for top performers</li>
+                        <li>Fresh themes every week</li>
+                    </ul>
+                </div>
+                <div class="feature-detail">
+                    <h3>🏆 Achievement System</h3>
+                    <ul>
+                        <li>Unlock badges and trophies</li>
+                        <li>Complete challenges for rewards</li>
+                        <li>Track milestones and progress</li>
+                        <li>Show off your accomplishments</li>
+                    </ul>
+                </div>
+                <div class="feature-detail">
+                    <h3>👥 Social Features</h3>
+                    <ul>
+                        <li>Connect with friends</li>
+                        <li>Send and receive gifts</li>
+                        <li>Join player clubs</li>
+                        <li>Chat with other players</li>
+                    </ul>
+                </div>
+                <div class="feature-detail">
+                    <h3>🎁 Daily Rewards</h3>
+                    <ul>
+                        <li>Daily login bonus credits</li>
+                        <li>Spin the bonus wheel</li>
+                        <li>Holiday specials and events</li>
+                        <li>Loyalty rewards program</li>
+                    </ul>
+                </div>
+                <div class="feature-detail">
+                    <h3>📊 Player Statistics</h3>
+                    <ul>
+                        <li>Track gameplay history</li>
+                        <li>View winning patterns</li>
+                        <li>Personalized insights</li>
+                        <li>Goal-oriented progression</li>
+                    </ul>
+                </div>
+                <div class="feature-detail">
+                    <h3>🔔 Notifications</h3>
+                    <ul>
+                        <li>Tournament reminders</li>
+                        <li>Bonus availability alerts</li>
+                        <li>Friend activity updates</li>
+                        <li>Game recommendations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="security">
+                <h3>🔒 Fair Play & Safety</h3>
+                <p>All outcomes are pseudo-random for fun gameplay. No real-money transactions — only virtual credits. We encourage responsible gaming and offer quick access to help resources.</p>
+            </div>
+
+            <div class="roadmap">
+                <h2>Product Roadmap</h2>
+                <div class="milestones">
+                    <div class="milestone">
+                        <h4>Q1: Enhanced Leaderboards</h4>
+                        <p>Seasonal ladders, regional rankings, and anti-cheat improvements.</p>
+                    </div>
+                    <div class="milestone">
+                        <h4>Q2: Clubs & Teams</h4>
+                        <p>Create clubs, play co-op challenges, and earn team perks.</p>
+                    </div>
+                    <div class="milestone">
+                        <h4>Q3: Live Events</h4>
+                        <p>Limited-time themed events with exclusive cosmetics and badges.</p>
+                    </div>
+                    <div class="milestone">
+                        <h4>Q4: Creator Program</h4>
+                        <p>Custom rooms, community tournaments, and influencer tools.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <section class="faq">
+                <h2>Feature FAQs</h2>
+                <div class="faq-item">
+                    <div class="faq-question">Do tournaments require registration?</div>
+                    <div class="faq-answer">Weekly tournaments are open to all players. Some special events may require a free opt-in.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How are rewards distributed?</div>
+                    <div class="faq-answer">Rewards are cosmetic and fun-focused, delivered to your profile inbox after each event.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Will there be co-op modes?</div>
+                    <div class="faq-answer">Yes. Co-op challenges and club goals are part of our roadmap to encourage teamwork.</div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">Play responsibly. If needed, take breaks and seek help resources.</div>
+            <div class="footer-links">
+                <a href="about.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="responsible.html">Responsible Gaming</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-bottom">© 2025 KickOff Spin. All rights reserved. | 18+</div>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        hamburger.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.faq .faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                document.querySelectorAll('.faq .faq-answer').forEach(a => a.classList.remove('active'));
+                const answer = q.nextElementSibling; if (answer) answer.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
+
+
