@@ -17,7 +17,7 @@
         .nav-menu a.active { color: #ffa500; font-weight: bold; }
         .play-btn { background: linear-gradient(45deg, #ff6b35, #ffa500); padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; color: white; font-weight: bold; transition: transform 0.3s ease; }
         .play-btn:hover { transform: translateY(-2px); }
-        .hamburger { display: none; flex-direction: column; cursor: pointer; }
+        .hamburger { display: none; flex-direction: column; cursor: pointer; z-index: 1101; }
         .hamburger span { width: 25px; height: 3px; background: #ffa500; margin: 3px 0; transition: 0.3s; }
 
         .main-content { margin-top: 100px; }
@@ -46,7 +46,7 @@
 
         @media (max-width: 768px) {
             .hamburger { display: flex; }
-            .nav-menu { position: fixed; top: 100%; left: -100%; width: 100%; height: 100vh; background: #2d3748; flex-direction: column; align-items: center; padding-top: 2rem; transition: left 0.3s ease; }
+            .nav-menu { position: fixed; top: 70px; left: -100%; width: 100%; height: calc(100vh - 70px); background: #2d3748; flex-direction: column; align-items: center; padding-top: 2rem; transition: left 0.3s ease; z-index: 1100; }
             .nav-menu.active { left: 0; }
             .footer-links { flex-direction: column; gap: 1rem; }
         }
@@ -131,7 +131,9 @@
     <script>
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('navMenu');
+        const closeMobileMenu = () => { navMenu.classList.remove('active'); };
         hamburger.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        navMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
     </script>
 </body>
 </html>
